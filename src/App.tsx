@@ -1,10 +1,13 @@
 import React from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
-
 import './App.css';
 import 'leaflet/dist/leaflet.css';
+import { useGeodataFetch } from './hooks/useGeodataFetch';
 
 function App(): JSX.Element {
+  const { isFetching, geoData, error } = useGeodataFetch();
+  console.log(geoData);
+
   return (
     <div className="Map">
       <MapContainer center={[0, 0]} zoom={4}>
