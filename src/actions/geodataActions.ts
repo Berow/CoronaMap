@@ -1,32 +1,48 @@
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
+import { GeoJSON } from 'geojson';
 import coronaV2 from '../api/coronaV2';
 import { GEOJson } from '../utils';
+
 import {
   GEODATA_FILL,
   GEODATA_START_FETCHING,
   GEODATA_SET_FETCHING_ERROR,
+  GeodataActionTypes,
+  ErrorHttpAction,
 } from '../types/geodataActionTypes';
 import { AppState } from '../reducers/rootReducer';
 
-export const fetchGeoData = (): ThunkAction<void, AppState, unknown, AnyAction> => dispatch => {
-  dispatch({
+export function startFetching(): GeodataActionTypes {
+  return {
     type: GEODATA_START_FETCHING,
-  });
+  };
+}
+
+export function fill(payload: GeoJSON): GeodataActionTypes {
+  return {
+    type: GEODATA_FILL,
+    payload,
+  };
+}
+
+export function setfetchingError(payload: ErrorHttpAction): GeodataActionTypes {
+  return {
+    type: GEODATA_SET_FETCHING_ERROR,
+    error: true,
+    payload,
+  };
+}
+
+export const fetchGeoData = (): ThunkAction<void, AppState, unknown, AnyAction> => dispatch => {
+  dispatch(startFetching);
 
   coronaV2
     .get('/countries')
     .then(response => {
-      dispatch({
-        type: GEODATA_FILL,
-        payload: GEOJson(response.data),
-      });
+      dispatch(fill(GEOJson(response.data)));
     })
     .catch(error => {
-      dispatch({
-        type: GEODATA_SET_FETCHING_ERROR,
-        error: true,
-        status: error,
-      });
+      dispatch(setfetchingError(error));
     });
 };
