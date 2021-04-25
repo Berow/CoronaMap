@@ -1,4 +1,4 @@
-import { GeoJSON } from 'geojson';
+import { FeatureCollection } from 'geojson';
 
 export type ErrorHttpAction = {
   status: number;
@@ -17,7 +17,7 @@ export type GeodataStopFetchingAction = {
 export const GEODATA_FILL = 'GEODATA_FILL';
 export type GeodataFillAction = {
   type: typeof GEODATA_FILL;
-  payload: GeoJSON;
+  payload: FeatureCollection;
 };
 
 export const GEODATA_SET_FETCHING_ERROR = 'GEODATA_SET_FETCHING_ERROR';

@@ -1,4 +1,4 @@
-import { GeoJSON } from 'geojson';
+import { FeatureCollection } from 'geojson';
 import {
   GeodataActionTypes,
   GEODATA_START_FETCHING,
@@ -9,13 +9,16 @@ import {
 } from '../types/geodataActionTypes';
 
 export type GeodataState = {
-  geoData: GeoJSON | null;
+  geoData: FeatureCollection;
   isFetching: boolean;
   error: false | ErrorHttpAction;
 };
 
 const initialState: GeodataState = {
-  geoData: null,
+  geoData: {
+    type: 'FeatureCollection',
+    features: [],
+  },
   isFetching: false,
   error: false,
 };

@@ -1,4 +1,4 @@
-import { GeoJSON } from 'geojson';
+import { FeatureCollection } from 'geojson';
 
 type countryInfo = {
   flag: string;
@@ -35,8 +35,8 @@ type countryData = {
   updated: number;
 };
 
-export function GEOJson(data: Array<countryData>): GeoJSON {
-  const geoJson: GeoJSON = {
+export function GEOJson(data: Array<countryData>): FeatureCollection {
+  const geoJson: FeatureCollection = {
     type: 'FeatureCollection',
     features: data.map(country => {
       const { countryInfo } = country;

@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { GeoJSON } from 'geojson';
+import { FeatureCollection } from 'geojson';
 import coronaV2 from '../api/coronaV2';
 import { GEOJson } from '../utils';
 
@@ -19,7 +19,7 @@ export function startFetching(): GeodataActionTypes {
   };
 }
 
-export function fill(payload: GeoJSON): GeodataActionTypes {
+export function fill(payload: FeatureCollection): GeodataActionTypes {
   return {
     type: GEODATA_FILL,
     payload,
