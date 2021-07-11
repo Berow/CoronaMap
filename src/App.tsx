@@ -5,24 +5,24 @@ import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import './App.scss';
 import 'leaflet/dist/leaflet.css';
 import { useGeodataFetch } from './hooks/useGeodataFetch';
+import { countryData } from './utils/index';
 
 function GeoJsonLayer(geoData: FeatureCollection): null {
   const map = useMap();
 
-  const geoJsonMarkers = new L.GeoJSON(geoData, {
+  const geoJsonMarkers = new L.GeoJSON<countryData>(geoData, {
     pointToLayer: (feature, latlng) => {
-      const { properties = {} } = feature;
       let casesString: string;
 
-      const { country, updated, cases, deaths, recovered } = properties;
+      const { country, updated, cases, deaths, recovered } = feature.properties;
 
       casesString = `${cases}`;
 
-      if (cases > 1000) {
+      if (cases && cases > 1000) {
         casesString = `${casesString.slice(0, -3)}k+`;
       }
 
-      const updatedFormatted = new Date(updated).toLocaleString();
+      const updatedFormatted = updated && new Date(updated).toLocaleString();
 
       const html = `
       <span class="icon-marker">
