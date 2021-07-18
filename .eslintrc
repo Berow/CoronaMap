@@ -34,12 +34,14 @@
     "import/prefer-default-export": 0,
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
     // react
+    "no-underscore-dangle": 0,
     "react/forbid-prop-types": 0,
     "react/prop-types": 0,
     "react/jsx-fragments": 0,
     "react/jsx-props-no-spreading": 0,
     "react/jsx-one-expression-per-line": 0,
     // @typescript-eslint
+    // "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/naming-convention": [
       "error",
       {
