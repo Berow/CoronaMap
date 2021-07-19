@@ -1,5 +1,11 @@
 import { FeatureCollection } from 'geojson';
 
+export const GEODATA_SET_COUNTRY = 'GEODATA_SET_COUNTRY';
+export type GeodataSetCountryAction = {
+  type: typeof GEODATA_SET_COUNTRY;
+  payload: string;
+};
+
 export type ErrorHttpAction = {
   status: number;
 };
@@ -28,6 +34,7 @@ export type GeodataSetFetchingErrorAction = {
 };
 
 export type GeodataActionTypes =
+  | GeodataSetCountryAction
   | GeodataStartFetchingAction
   | GeodataStopFetchingAction
   | GeodataFillAction

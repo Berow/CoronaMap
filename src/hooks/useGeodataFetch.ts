@@ -6,7 +6,7 @@ import { AppState } from '../reducers/rootReducer';
 
 export const useGeodataFetch = (): GeodataState => {
   const dispatch = useDispatch();
-  const { geoData, isFetching, error } = useSelector<AppState, GeodataState>(
+  const { country, geoData, isFetching, error } = useSelector<AppState, GeodataState>(
     state => state.geodataReducer,
   );
 
@@ -15,6 +15,7 @@ export const useGeodataFetch = (): GeodataState => {
   }, [dispatch]);
 
   return {
+    country,
     geoData,
     isFetching,
     error,

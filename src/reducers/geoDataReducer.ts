@@ -6,15 +6,18 @@ import {
   GEODATA_STOP_FETCHING,
   GEODATA_SET_FETCHING_ERROR,
   ErrorHttpAction,
+  GEODATA_SET_COUNTRY,
 } from '../types/geodataActionTypes';
 
 export type GeodataState = {
+  country: string;
   geoData: FeatureCollection;
   isFetching: boolean;
   error: false | ErrorHttpAction;
 };
 
 const initialState: GeodataState = {
+  country: '',
   geoData: {
     type: 'FeatureCollection',
     features: [],
@@ -25,6 +28,11 @@ const initialState: GeodataState = {
 
 export const geodataReducer = (state = initialState, action: GeodataActionTypes): GeodataState => {
   switch (action.type) {
+    case GEODATA_SET_COUNTRY:
+      return {
+        ...state,
+        country: action.payload,
+      };
     case GEODATA_START_FETCHING:
       return {
         ...state,
