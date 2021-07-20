@@ -1,6 +1,5 @@
-import { AnyAction, Dispatch } from 'redux';
+import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import { useDispatch } from 'react-redux';
 import { FeatureCollection } from 'geojson';
 import coronaV2 from '../api/coronaV2';
 import { GEOJson } from '../utils';
@@ -28,7 +27,7 @@ export function fill(payload: FeatureCollection): GeodataActionTypes {
   };
 }
 
-export function setfetchingError(payload: ErrorHttpAction): GeodataActionTypes {
+export function setFetchingError(payload: ErrorHttpAction): GeodataActionTypes {
   return {
     type: GEODATA_SET_FETCHING_ERROR,
     error: true,
@@ -37,14 +36,13 @@ export function setfetchingError(payload: ErrorHttpAction): GeodataActionTypes {
 }
 
 export function setCountry(payload: string): GeodataActionTypes {
-  console.log(payload);
   return {
     type: GEODATA_SET_COUNTRY,
     payload,
   };
 }
 
-export const fetchGeoData = (): ThunkAction<void, AppState, unknown, AnyAction> => dispatch => {
+export const fetchAllGeoData = (): ThunkAction<void, AppState, unknown, AnyAction> => dispatch => {
   dispatch(startFetching);
 
   coronaV2
@@ -53,12 +51,21 @@ export const fetchGeoData = (): ThunkAction<void, AppState, unknown, AnyAction> 
       dispatch(fill(GEOJson(response.data)));
     })
     .catch(error => {
-      dispatch(setfetchingError(error));
+      dispatch(setFetchingError(error));
     });
 };
 
-export const setCountryName = (payload: string) => {
-  const dispatch = useDispatch();
-  console.log(payload);
-  return dispatch(setCountry(payload));
+export const fetchCountryData = (
+  country: string,
+): ThunkAction<void, AppState, unknown, AnyAction> => dispatch => {
+  dispatch(startFetching);
+  console.log(country);
+  coronaV2
+    .get(`/countries/${country}`)
+    .then(response => {
+      dispatch(fill(GEOJson(response.data)));
+    })
+    .catch(error => {
+      dispatch(setFetchingError(error));
+    });
 };

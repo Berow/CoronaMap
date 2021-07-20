@@ -1,5 +1,5 @@
 import { useGeodataFetch } from './useGeodataFetch';
 import { useGetCountry } from './useGetCountry';
-import { useSetCountry } from './useSetCountry';
+import { useFetchCountry } from './useFetchCountry';
 
-export { useGetCountry, useGeodataFetch, useSetCountry };
+export { useGetCountry, useGeodataFetch, useFetchCountry };

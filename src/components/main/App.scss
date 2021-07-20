@@ -1,0 +1,11 @@
+.container {
+  display: grid;
+  grid-template: 'map' 'sidebar';
+  grid-template-columns: minmax(200px, 80%) 20%;
+  grid-template-rows: minmax(500px, 100vh) auto;
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+}
