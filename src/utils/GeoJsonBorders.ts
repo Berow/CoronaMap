@@ -13,7 +13,11 @@ function colorMap(data: Feature[]) {
   let maxCases = 0;
   const countryCases: Map<string, number> = data.reduce((map, el) => {
     if (el.properties?.cases >= maxCases) maxCases = el.properties?.cases;
-    return map.set(el.properties?.country, el.properties?.cases);
+    const country =
+      el.properties?.country === 'Democratic Republic of the Congo'
+        ? 'Congo'
+        : el.properties?.country;
+    return map.set(country, el.properties?.cases);
   }, new Map());
   const scale = chroma.scale(['green', 'red']).domain([0, maxCases]);
 
@@ -59,7 +63,9 @@ export const GeoJsonBordersLayer = (): null => {
     }
 
     if (e.target.feature.properties.name_en) {
-      dispatch(setCountry(e.target.feature.properties.name_en));
+      if (e.target.feature.properties.name_en === 'Democratic Republic of the Congo') {
+        dispatch(setCountry('Congo'));
+      } else dispatch(setCountry(e.target.feature.properties.name_en));
     }
 
     e.target.setStyle({
