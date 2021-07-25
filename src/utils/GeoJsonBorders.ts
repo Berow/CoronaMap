@@ -1,12 +1,33 @@
+import { useEffect } from 'react';
 import L, { LeafletMouseEvent } from 'leaflet';
 import { useMap } from 'react-leaflet';
+import { Feature } from 'geojson';
+import chroma from 'chroma-js';
 import { useDispatch } from 'react-redux';
 import { setCountry } from '../actions/geodataActions';
 import { geoJsonBorders } from './Borders';
+import coronaV2 from '../api/coronaV2';
+import { GEOJson } from '.';
+
+function colorMap(data: Feature[]) {
+  let maxCases = 0;
+  const countryCases: Map<string, number> = data.reduce((map, el) => {
+    if (el.properties?.cases >= maxCases) maxCases = el.properties?.cases;
+    return map.set(el.properties?.country, el.properties?.cases);
+  }, new Map());
+  const scale = chroma.scale(['green', 'red']).domain([0, maxCases]);
+
+  return { map: countryCases, scale };
+}
 
 export const GeoJsonBordersLayer = (): null => {
   const map = useMap();
   const dispatch = useDispatch();
+  // let borders = new L.GeoJSON();
+  let data: {
+    map: Map<string, number>;
+    scale: chroma.Scale<chroma.Color>;
+  };
 
   let selected: null | LeafletMouseEvent = null;
   let previous: null | LeafletMouseEvent = null;
@@ -26,21 +47,23 @@ export const GeoJsonBordersLayer = (): null => {
     }
   };
 
-  const dehighlight = (borders: L.GeoJSON<L.Layer>, e: LeafletMouseEvent) => {
+  const dehighlight = (border: L.GeoJSON<L.Layer>, e: LeafletMouseEvent) => {
     if (selected === null || selected.target._leaflet_id !== e?.target._leaflet_id) {
-      borders.resetStyle(e.target);
+      border.resetStyle(e.target);
     }
   };
 
-  const select = (borders: L.GeoJSON<L.Layer>, e: LeafletMouseEvent) => {
+  const select = (border: L.GeoJSON<L.Layer>, e: LeafletMouseEvent) => {
     if (selected !== null) {
       previous = selected;
     }
 
-    if (e.target.feature.properties.name_en)
+    if (e.target.feature.properties.name_en) {
       dispatch(setCountry(e.target.feature.properties.name_en));
+    }
+
     e.target.setStyle({
-      weight: 15,
+      weight: 7,
       color: '#f76c6c',
       dashArray: '',
       fillColor: '#eee',
@@ -50,26 +73,43 @@ export const GeoJsonBordersLayer = (): null => {
     e.target.bringToFront();
     selected = e;
     if (previous) {
-      dehighlight(borders, previous);
+      dehighlight(border, previous);
     }
   };
 
-  const borders = new L.GeoJSON<L.Layer>(geoJsonBorders, {
-    onEachFeature(feature, layer) {
-      layer.on({
-        click(e) {
-          select(borders, e);
-        },
-        mouseover(e) {
-          highlight(e);
-        },
-        mouseout(e) {
-          dehighlight(borders, e);
-        },
+  useEffect(() => {
+    coronaV2
+      .get('/countries')
+      .then(response => {
+        data = colorMap(GEOJson(response.data).features);
+        const borders = new L.GeoJSON(geoJsonBorders, {
+          style: feature => {
+            let color;
+            if (data && data.map.get(feature?.properties.name_en)) {
+              color = data.scale(data.map.get(feature?.properties.name_en)).hex();
+            }
+            return { fillColor: `${color}` };
+          },
+          onEachFeature(feature, layer) {
+            layer.on({
+              click(e) {
+                select(borders, e);
+              },
+              mouseover(e) {
+                highlight(e);
+              },
+              mouseout(e) {
+                dehighlight(borders, e);
+              },
+            });
+          },
+        });
+        borders.addTo(map);
+      })
+      .catch(error => {
+        data = error;
       });
-    },
-  });
-  borders.addTo(map);
+  }, []);
 
   return null;
 };

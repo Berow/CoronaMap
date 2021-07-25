@@ -1,4 +1,5 @@
-import { useSelector } from 'react-redux';
+import { useSelector, shallowEqual } from 'react-redux';
+import { createSelector } from 'reselect';
 import { AppState } from '../reducers/rootReducer';
 
 export const useGetCountry = (): string => {

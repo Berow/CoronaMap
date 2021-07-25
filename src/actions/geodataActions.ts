@@ -44,7 +44,6 @@ export function setCountry(payload: string): GeodataActionTypes {
 
 export const fetchAllGeoData = (): ThunkAction<void, AppState, unknown, AnyAction> => dispatch => {
   dispatch(startFetching);
-
   coronaV2
     .get('/countries')
     .then(response => {
@@ -59,11 +58,10 @@ export const fetchCountryData = (
   country: string,
 ): ThunkAction<void, AppState, unknown, AnyAction> => dispatch => {
   dispatch(startFetching);
-  console.log(country);
   coronaV2
     .get(`/countries/${country}`)
     .then(response => {
-      dispatch(fill(GEOJson(response.data)));
+      dispatch(fill(response.data));
     })
     .catch(error => {
       dispatch(setFetchingError(error));

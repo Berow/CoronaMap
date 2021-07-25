@@ -4,6 +4,7 @@ import { GeoJsonBordersLayer } from '../../utils/GeoJsonBorders';
 import { Sidebar } from '../sidebar/Sidebar';
 import './App.scss';
 import 'leaflet/dist/leaflet.css';
+import { useGeodataFetch } from '../../hooks';
 
 function App(): JSX.Element {
   return (

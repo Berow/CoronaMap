@@ -8,10 +8,11 @@ import {
   ErrorHttpAction,
   GEODATA_SET_COUNTRY,
 } from '../types/geodataActionTypes';
+import { countryData } from '../utils';
 
 export type GeodataState = {
   country: string;
-  geoData: FeatureCollection;
+  geoData: FeatureCollection | countryData;
   isFetching: boolean;
   error: false | ErrorHttpAction;
 };

@@ -15,7 +15,7 @@ export type countryData = {
   cases?: number;
   casesPerOneMillion?: number;
   continent?: string;
-  country?: string;
+  country: string;
   countryInfo: countryInfo;
   critical?: number;
   criticalPerOneMillion?: number;

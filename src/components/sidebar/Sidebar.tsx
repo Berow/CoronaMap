@@ -1,18 +1,28 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FeatureCollection } from 'geojson';
-import { useGeodataFetch, useGetCountry, useFetchCountry } from '../../hooks';
+import { GeodataState } from '../../reducers/geoDataReducer';
+import { useGeodataFetch, useGetCountry, useFetchCountry, usePrevious } from '../../hooks';
 import { countryData } from '../../utils/index';
 
-export function Sidebar(): JSX.Element {
-  const country = useGetCountry();
-  const [response, setData] = useState<FeatureCollection>();
-  console.log(country);
+const isCountry = (f: FeatureCollection | countryData | undefined): f is countryData => {
+  return (f as countryData).country !== undefined;
+};
 
-  const { geoData, error, isFetching } = country ? useFetchCountry(country) : useGeodataFetch();
+export const Sidebar = React.memo(
+  (): JSX.Element => {
+    const country = useGetCountry();
 
-  if (geoData !== response && !response) setData(geoData);
-  console.log(geoData);
-  console.log(response);
+    let data: Partial<GeodataState> = {};
 
-  return <div>{response?.type}</div>;
-}
+    if (country) {
+      data = useFetchCountry(country);
+    }
+    if (!country) data = useGeodataFetch();
+
+    const render = isCountry(data.geoData) ? data.geoData.country : 'All countries';
+
+    return <div>{render}</div>;
+  },
+);
+
+Sidebar.displayName = 'Sidebar';

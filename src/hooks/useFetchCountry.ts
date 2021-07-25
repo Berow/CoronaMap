@@ -12,7 +12,7 @@ export const useFetchCountry = (country: string): Partial<GeodataState> => {
 
   useEffect(() => {
     dispatch(fetchCountryData(country));
-  }, [dispatch]);
+  }, [country]);
 
   return {
     geoData,
