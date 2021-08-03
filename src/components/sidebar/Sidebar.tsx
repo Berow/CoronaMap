@@ -1,28 +1,57 @@
 import React, { useRef, useState } from 'react';
 import { FeatureCollection } from 'geojson';
 import { GeodataState } from '../../reducers/geoDataReducer';
-import { useGeodataFetch, useGetCountry, useFetchCountry, usePrevious } from '../../hooks';
+import {
+  useGeodataFetch,
+  useGetCountry,
+  useFetchCountry,
+  usefetchHistoricalData,
+} from '../../hooks';
 import { countryData } from '../../utils/index';
 
 const isCountry = (f: FeatureCollection | countryData | undefined): f is countryData => {
   return (f as countryData).country !== undefined;
 };
 
-export const Sidebar = React.memo(
-  (): JSX.Element => {
-    const country = useGetCountry();
+function renderCountry(geoData: countryData) {
+  console.log(geoData);
+  const { country, updated, cases, deaths, recovered } = geoData;
+  const updatedFormatted = updated && new Date(updated).toLocaleString();
+  return (
+    <>
+      <h2>{country}</h2>
+      <ul>
+        <li>
+          <strong>Confirmed:</strong> {cases}
+        </li>
+        <li>
+          <strong>Deaths:</strong> {deaths}
+        </li>
+        <li>
+          <strong>Recovered:</strong> {recovered}
+        </li>
+        <li>
+          <strong>Last Update:</strong> {updatedFormatted}
+        </li>
+      </ul>
+    </>
+  );
+}
 
-    let data: Partial<GeodataState> = {};
+export const Sidebar = (): JSX.Element => {
+  const country = useGetCountry();
 
-    if (country) {
-      data = useFetchCountry(country);
-    }
-    if (!country) data = useGeodataFetch();
+  let data: Partial<GeodataState> = {};
+  // const historical: Partial<GeodataState> = {};
 
-    const render = isCountry(data.geoData) ? data.geoData.country : 'All countries';
+  if (country) {
+    data = useFetchCountry(country);
+    // historical = usefetchHistoricalData(country);
+    console.log(data);
+  }
+  if (!country) data = useGeodataFetch();
 
-    return <div>{render}</div>;
-  },
-);
+  const render = isCountry(data.geoData) ? renderCountry(data.geoData) : 'All countries';
 
-Sidebar.displayName = 'Sidebar';
+  return <div>{render}</div>;
+};

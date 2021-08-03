@@ -35,6 +35,34 @@ export type countryData = {
   updated?: number;
 };
 
+export type historicalDataAll = {
+  cases: {
+    [date: string]: number;
+  }[];
+  deaths: {
+    [date: string]: number;
+  }[];
+  recovered: {
+    [date: string]: number;
+  }[];
+};
+
+export type historicalDataCountry = {
+  country: string;
+  province: string[];
+  timeline: {
+    cases: {
+      [date: string]: number;
+    }[];
+    deaths: {
+      [date: string]: number;
+    }[];
+    recovered: {
+      [date: string]: number;
+    }[];
+  };
+};
+
 export function GEOJson(data: Array<countryData>): FeatureCollection {
   const geoJson: FeatureCollection = {
     type: 'FeatureCollection',

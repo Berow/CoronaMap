@@ -2,7 +2,7 @@ import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { FeatureCollection } from 'geojson';
 import coronaV2 from '../api/coronaV2';
-import { GEOJson } from '../utils';
+import { GEOJson, historicalDataAll, historicalDataCountry } from '../utils';
 
 import {
   GEODATA_SET_COUNTRY,
@@ -11,6 +11,7 @@ import {
   GEODATA_SET_FETCHING_ERROR,
   GeodataActionTypes,
   ErrorHttpAction,
+  GEODATA_FILL_HISTORICAL,
 } from '../types/geodataActionTypes';
 import { AppState } from '../reducers/rootReducer';
 
@@ -23,6 +24,15 @@ export function startFetching(): GeodataActionTypes {
 export function fill(payload: FeatureCollection): GeodataActionTypes {
   return {
     type: GEODATA_FILL,
+    payload,
+  };
+}
+
+export function fillHistorical(
+  payload: historicalDataCountry | historicalDataAll,
+): GeodataActionTypes {
+  return {
+    type: GEODATA_FILL_HISTORICAL,
     payload,
   };
 }
@@ -62,6 +72,20 @@ export const fetchCountryData = (
     .get(`/countries/${country}`)
     .then(response => {
       dispatch(fill(response.data));
+    })
+    .catch(error => {
+      dispatch(setFetchingError(error));
+    });
+};
+
+export const fetchHistoricalData = (
+  country: string,
+): ThunkAction<void, AppState, unknown, AnyAction> => dispatch => {
+  dispatch(startFetching);
+  coronaV2
+    .get(`/historical/${country}`)
+    .then(response => {
+      dispatch(fillHistorical(response.data));
     })
     .catch(error => {
       dispatch(setFetchingError(error));

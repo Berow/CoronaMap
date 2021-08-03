@@ -7,12 +7,14 @@ import {
   GEODATA_SET_FETCHING_ERROR,
   ErrorHttpAction,
   GEODATA_SET_COUNTRY,
+  GEODATA_FILL_HISTORICAL,
 } from '../types/geodataActionTypes';
-import { countryData } from '../utils';
+import { countryData, historicalDataAll, historicalDataCountry } from '../utils';
 
 export type GeodataState = {
   country: string;
   geoData: FeatureCollection | countryData;
+  historicalData: historicalDataAll | historicalDataCountry | null;
   isFetching: boolean;
   error: false | ErrorHttpAction;
 };
@@ -23,6 +25,7 @@ const initialState: GeodataState = {
     type: 'FeatureCollection',
     features: [],
   },
+  historicalData: null,
   isFetching: false,
   error: false,
 };
@@ -55,6 +58,12 @@ export const geodataReducer = (state = initialState, action: GeodataActionTypes)
       return {
         ...state,
         geoData: action.payload,
+        error: false,
+      };
+    case 'GEODATA_FILL_HISTORICAL':
+      return {
+        ...state,
+        historicalData: action.payload,
         error: false,
       };
     default:
