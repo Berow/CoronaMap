@@ -9,12 +9,12 @@ import {
   GEODATA_SET_COUNTRY,
   GEODATA_FILL_HISTORICAL,
 } from '../types/geodataActionTypes';
-import { countryData, historicalDataAll, historicalDataCountry } from '../utils';
+import { countryData, HistoricalDataAll, HistoricalDataCountry } from '../utils';
 
 export type GeodataState = {
   country: string;
   geoData: FeatureCollection | countryData;
-  historicalData: historicalDataAll | historicalDataCountry | null;
+  historicalData: HistoricalDataAll | HistoricalDataCountry | null;
   isFetching: boolean;
   error: false | ErrorHttpAction;
 };

@@ -1,12 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { FeatureCollection } from 'geojson';
 import { GeodataState } from '../../reducers/geoDataReducer';
-import {
-  useGeodataFetch,
-  useGetCountry,
-  useFetchCountry,
-  usefetchHistoricalData,
-} from '../../hooks';
+import { useGeodataFetch, useGetCountry, useFetchCountry } from '../../hooks';
 import { countryData } from '../../utils/index';
 
 const isCountry = (f: FeatureCollection | countryData | undefined): f is countryData => {

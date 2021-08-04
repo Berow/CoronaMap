@@ -2,7 +2,7 @@ import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { FeatureCollection } from 'geojson';
 import coronaV2 from '../api/coronaV2';
-import { GEOJson, historicalDataAll, historicalDataCountry } from '../utils';
+import { GEOJson, HistoricalDataAll, HistoricalDataCountry } from '../utils';
 
 import {
   GEODATA_SET_COUNTRY,
@@ -29,7 +29,7 @@ export function fill(payload: FeatureCollection): GeodataActionTypes {
 }
 
 export function fillHistorical(
-  payload: historicalDataCountry | historicalDataAll,
+  payload: HistoricalDataCountry | HistoricalDataAll,
 ): GeodataActionTypes {
   return {
     type: GEODATA_FILL_HISTORICAL,

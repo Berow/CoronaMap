@@ -35,7 +35,7 @@ export type countryData = {
   updated?: number;
 };
 
-export type historicalDataAll = {
+export type HistoricalDataAll = {
   cases: {
     [date: string]: number;
   }[];
@@ -47,7 +47,7 @@ export type historicalDataAll = {
   }[];
 };
 
-export type historicalDataCountry = {
+export type HistoricalDataCountry = {
   country: string;
   province: string[];
   timeline: {
