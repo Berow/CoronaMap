@@ -1,5 +1,5 @@
 import { FeatureCollection } from 'geojson';
-import { historicalDataAll, historicalDataCountry } from '../utils';
+import { HistoricalDataAll, HistoricalDataCountry } from '../utils';
 
 export const GEODATA_SET_COUNTRY = 'GEODATA_SET_COUNTRY';
 export type GeodataSetCountryAction = {
@@ -30,7 +30,7 @@ export type GeodataFillAction = {
 export const GEODATA_FILL_HISTORICAL = 'GEODATA_FILL_HISTORICAL';
 export type GeodataFillHistoricalAction = {
   type: typeof GEODATA_FILL_HISTORICAL;
-  payload: historicalDataAll | historicalDataCountry;
+  payload: HistoricalDataAll | HistoricalDataCountry;
 };
 
 export const GEODATA_SET_FETCHING_ERROR = 'GEODATA_SET_FETCHING_ERROR';

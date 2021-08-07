@@ -38,13 +38,13 @@ export type countryData = {
 export type HistoricalDataAll = {
   cases: {
     [date: string]: number;
-  }[];
+  };
   deaths: {
     [date: string]: number;
-  }[];
+  };
   recovered: {
     [date: string]: number;
-  }[];
+  };
 };
 
 export type HistoricalDataCountry = {
@@ -53,13 +53,13 @@ export type HistoricalDataCountry = {
   timeline: {
     cases: {
       [date: string]: number;
-    }[];
+    };
     deaths: {
       [date: string]: number;
-    }[];
+    };
     recovered: {
       [date: string]: number;
-    }[];
+    };
   };
 };
 

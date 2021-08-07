@@ -83,7 +83,7 @@ export const fetchHistoricalData = (
 ): ThunkAction<void, AppState, unknown, AnyAction> => dispatch => {
   dispatch(startFetching);
   coronaV2
-    .get(`/historical/${country}`)
+    .get(`/historical/${country}`, { params: { lastdays: 'all' } })
     .then(response => {
       dispatch(fillHistorical(response.data));
     })

@@ -14,7 +14,7 @@ import { countryData, HistoricalDataAll, HistoricalDataCountry } from '../utils'
 export type GeodataState = {
   country: string;
   geoData: FeatureCollection | countryData;
-  historicalData: HistoricalDataAll | HistoricalDataCountry | null;
+  historicalData: HistoricalDataAll | HistoricalDataCountry | Record<string, never>;
   isFetching: boolean;
   error: false | ErrorHttpAction;
 };
@@ -25,7 +25,7 @@ const initialState: GeodataState = {
     type: 'FeatureCollection',
     features: [],
   },
-  historicalData: null,
+  historicalData: {},
   isFetching: false,
   error: false,
 };
