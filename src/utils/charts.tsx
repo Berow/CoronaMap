@@ -1,45 +1,53 @@
 import React from 'react';
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
-type HistoryDay = {
+type casesTimelineType = {
   cases: number;
   date: string;
+}[];
+type deathsTimelineType = {
+  deaths: number;
+  date: string;
+}[];
+type recoveredTimelineType = {
+  recovered: number;
+  date: string;
+}[];
+
+export type AreaProps = {
+  data: casesTimelineType | deathsTimelineType | recoveredTimelineType;
+  color: string;
+  dataKey: string;
+  width?: string;
+  height?: string;
+  margin?: { top: number; right: number; bottom: number; left: number };
 };
 
-type Timeline = {
-  timeline: HistoryDay[];
-};
-
-export function Chart({ timeline }: Timeline): JSX.Element {
+function fillChart({
+  data,
+  dataKey,
+  color,
+  width = '100%',
+  height = '25%',
+  margin = { top: 10, right: 30, bottom: 20, left: 0 },
+}: AreaProps): JSX.Element {
+  console.log(color);
   return (
-    <ResponsiveContainer width="100%" height="40%">
-      <AreaChart
-        width={500}
-        height={400}
-        data={timeline}
-        margin={{
-          top: 10,
-          right: 30,
-          left: 0,
-          bottom: 0,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
+    <ResponsiveContainer width={width} height={height}>
+      <AreaChart width={500} height={400} data={data} margin={margin}>
+        <defs>
+          <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor={color} stopOpacity={0.8} />
+            <stop offset="95%" stopColor={color} stopOpacity={0} />
+          </linearGradient>
+        </defs>
         <XAxis dataKey="date" />
         <YAxis />
         <Tooltip />
-        <Area type="monotone" dataKey="cases" stroke="#8884d8" fill="#8884d8" />
+        <Area type="monotone" dataKey={dataKey} stroke={color} fillOpacity={1} fill="url(#color)" />
       </AreaChart>
     </ResponsiveContainer>
   );
 }
 
-// export const MemorizedChart = React.memo(Chart);
+export const Chart = React.memo(fillChart);
