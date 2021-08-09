@@ -28,7 +28,7 @@ function fillChart({
   dataKey,
   color,
   width = '100%',
-  height = '25%',
+  height = '20%',
   margin = { top: 10, right: 30, bottom: 20, left: 0 },
 }: AreaProps): JSX.Element {
   console.log(color);

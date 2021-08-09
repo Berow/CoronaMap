@@ -79,7 +79,7 @@ export const fetchCountryData = (
 };
 
 export const fetchHistoricalData = (
-  country: string,
+  country?: string,
 ): ThunkAction<void, AppState, unknown, AnyAction> => dispatch => {
   dispatch(startFetching);
   coronaV2
