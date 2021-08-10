@@ -94,9 +94,9 @@ export const fetchCovidDataAll = (): ThunkAction<
 > => dispatch => {
   dispatch(startFetching);
   coronaV2
-    .get(`/countries/all`)
+    .get(`/all`)
     .then(response => {
-      dispatch(fillGeoData(response.data));
+      dispatch(fillCovidAll(response.data));
     })
     .catch(error => {
       dispatch(setFetchingError(error));

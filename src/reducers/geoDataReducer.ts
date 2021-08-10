@@ -8,6 +8,7 @@ import {
   ErrorHttpAction,
   GEODATA_SET_COUNTRY,
   GEODATA_FILL_HISTORICAL,
+  GEODATA_FILL_COVID_ALL,
 } from '../types/geodataActionTypes';
 import { countryData, CovidAll, HistoricalDataAll, HistoricalDataCountry } from '../utils';
 
@@ -60,6 +61,12 @@ export const geodataReducer = (state = initialState, action: GeodataActionTypes)
       return {
         ...state,
         geoData: action.payload,
+        error: false,
+      };
+    case GEODATA_FILL_COVID_ALL:
+      return {
+        ...state,
+        covidAllData: action.payload,
         error: false,
       };
     case GEODATA_FILL_HISTORICAL:

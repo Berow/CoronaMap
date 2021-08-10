@@ -2,8 +2,8 @@ import React from 'react';
 import { FeatureCollection } from 'geojson';
 import { timeFormat } from 'd3-time-format';
 import { GeodataState } from '../../reducers/geoDataReducer';
-import { useGeodataFetch, useGetCountry, useFetchCountry } from '../../hooks';
-import { countryData, HistoricalDataAll, HistoricalDataCountry } from '../../utils/index';
+import { useGeodataFetch, useGetCountry, useFetchCountry, useCovidDataAllFetch } from '../../hooks';
+import { countryData, CovidAll, HistoricalDataAll, HistoricalDataCountry } from '../../utils/index';
 import { Chart } from '../../utils/Сharts';
 
 const isCountry = (f: FeatureCollection | countryData | undefined): f is countryData => {
@@ -75,22 +75,22 @@ function renderCountry(
 }
 
 function renderWorld(
-  geoData: FeatureCollection,
+  covidAllData: CovidAll,
   casesTimeline: casesTimelineType,
   deathsTimeline: deathsTimelineType,
   recoveredTimeline: recoveredTimelineType,
 ) {
-  if (!geoData) return null;
+  if (!covidAllData) return null;
 
-  console.log(geoData);
+  console.log(covidAllData);
 
-  // const { updated, cases, deaths, recovered } = geoData;
-  // const updatedFormatted = updated && new Date(updated).toLocaleString();
+  const { updated, cases, deaths, recovered } = covidAllData;
+  const updatedFormatted = updated && new Date(updated).toLocaleString();
 
   return (
     <>
-      <h2>WORLD DATA</h2>
-      {/* <ul>
+      <h2>WORLD DATA</h2>{' '}
+      <ul>
         <li>
           <strong>Confirmed:</strong> {cases}
         </li>
@@ -103,7 +103,7 @@ function renderWorld(
         <li>
           <strong>Last Update:</strong> {updatedFormatted}
         </li>
-      </ul> */}
+      </ul>{' '}
       <h3>Cases</h3>
       <Chart data={casesTimeline} dataKey="cases" color="orange" />
       <h3>Deaths</h3>
@@ -155,9 +155,9 @@ export const Sidebar = (): JSX.Element => {
     }
   }
   if (!country) {
-    data = useGeodataFetch();
+    data = useCovidDataAllFetch();
 
-    if (data.historicalData && isHistoricalDataAll(data.historicalData) && isWorld(data.geoData)) {
+    if (data.historicalData && isHistoricalDataAll(data.historicalData) && data.covidAllData) {
       const dates = Object.keys(data.historicalData.cases);
       const cases = Object.values(data.historicalData.cases);
       const deaths = Object.values(data.historicalData.deaths);
@@ -177,7 +177,7 @@ export const Sidebar = (): JSX.Element => {
           date: formatDate(new Date(dates[i])),
         });
       }
-      render = renderWorld(data.geoData, casesTimeline, deathsTimeline, recoveredTimeline);
+      render = renderWorld(data.covidAllData, casesTimeline, deathsTimeline, recoveredTimeline);
     }
   }
 

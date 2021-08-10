@@ -29,9 +29,8 @@ function fillChart({
   color,
   width = '100%',
   height = '20%',
-  margin = { top: 10, right: 30, bottom: 20, left: 0 },
+  margin = { top: 10, right: 10, bottom: 20, left: 25 },
 }: AreaProps): JSX.Element {
-  console.log(color);
   return (
     <ResponsiveContainer width={width} height={height}>
       <AreaChart width={500} height={400} data={data} margin={margin}>
