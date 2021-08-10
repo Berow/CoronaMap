@@ -4,7 +4,7 @@ import { timeFormat } from 'd3-time-format';
 import { GeodataState } from '../../reducers/geoDataReducer';
 import { useGeodataFetch, useGetCountry, useFetchCountry } from '../../hooks';
 import { countryData, HistoricalDataAll, HistoricalDataCountry } from '../../utils/index';
-import { Chart } from '../../utils/Charts';
+import { Chart } from '../../utils/Сharts';
 
 const isCountry = (f: FeatureCollection | countryData | undefined): f is countryData => {
   return (f as countryData).country !== undefined;
@@ -191,3 +191,4 @@ export const Sidebar = (): JSX.Element => {
 // TODO
 // Отдельные экшены для каждой ручки
 // глянуть типы
+// отдельные поля в редьюсере для мира, страны и исторических данных

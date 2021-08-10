@@ -2,7 +2,7 @@ import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { FeatureCollection } from 'geojson';
 import coronaV2 from '../api/coronaV2';
-import { GEOJson, HistoricalDataAll, HistoricalDataCountry } from '../utils';
+import { CovidAll, GEOJson, HistoricalDataAll, HistoricalDataCountry } from '../utils';
 
 import {
   GEODATA_SET_COUNTRY,
@@ -12,6 +12,7 @@ import {
   GeodataActionTypes,
   ErrorHttpAction,
   GEODATA_FILL_HISTORICAL,
+  GEODATA_FILL_COVID_ALL,
 } from '../types/geodataActionTypes';
 import { AppState } from '../reducers/rootReducer';
 
@@ -21,7 +22,7 @@ export function startFetching(): GeodataActionTypes {
   };
 }
 
-export function fill(payload: FeatureCollection): GeodataActionTypes {
+export function fillGeoData(payload: FeatureCollection): GeodataActionTypes {
   return {
     type: GEODATA_FILL,
     payload,
@@ -33,6 +34,13 @@ export function fillHistorical(
 ): GeodataActionTypes {
   return {
     type: GEODATA_FILL_HISTORICAL,
+    payload,
+  };
+}
+
+export function fillCovidAll(payload: CovidAll): GeodataActionTypes {
+  return {
+    type: GEODATA_FILL_COVID_ALL,
     payload,
   };
 }
@@ -57,7 +65,7 @@ export const fetchAllGeoData = (): ThunkAction<void, AppState, unknown, AnyActio
   coronaV2
     .get('/countries')
     .then(response => {
-      dispatch(fill(GEOJson(response.data)));
+      dispatch(fillGeoData(GEOJson(response.data)));
     })
     .catch(error => {
       dispatch(setFetchingError(error));
@@ -71,7 +79,24 @@ export const fetchCountryData = (
   coronaV2
     .get(`/countries/${country}`)
     .then(response => {
-      dispatch(fill(response.data));
+      dispatch(fillGeoData(response.data));
+    })
+    .catch(error => {
+      dispatch(setFetchingError(error));
+    });
+};
+
+export const fetchCovidDataAll = (): ThunkAction<
+  void,
+  AppState,
+  unknown,
+  AnyAction
+> => dispatch => {
+  dispatch(startFetching);
+  coronaV2
+    .get(`/countries/all`)
+    .then(response => {
+      dispatch(fillGeoData(response.data));
     })
     .catch(error => {
       dispatch(setFetchingError(error));
@@ -84,6 +109,22 @@ export const fetchHistoricalData = (
   dispatch(startFetching);
   coronaV2
     .get(`/historical/${country}`, { params: { lastdays: 'all' } })
+    .then(response => {
+      dispatch(fillHistorical(response.data));
+    })
+    .catch(error => {
+      dispatch(setFetchingError(error));
+    });
+};
+export const fetchHistoricalDataAll = (): ThunkAction<
+  void,
+  AppState,
+  unknown,
+  AnyAction
+> => dispatch => {
+  dispatch(startFetching);
+  coronaV2
+    .get(`/historical/all`, { params: { lastdays: 'all' } })
     .then(response => {
       dispatch(fillHistorical(response.data));
     })

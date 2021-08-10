@@ -1,5 +1,5 @@
 import { FeatureCollection } from 'geojson';
-import { HistoricalDataAll, HistoricalDataCountry } from '../utils';
+import { CovidAll, HistoricalDataAll, HistoricalDataCountry } from '../utils';
 
 export const GEODATA_SET_COUNTRY = 'GEODATA_SET_COUNTRY';
 export type GeodataSetCountryAction = {
@@ -33,6 +33,12 @@ export type GeodataFillHistoricalAction = {
   payload: HistoricalDataAll | HistoricalDataCountry;
 };
 
+export const GEODATA_FILL_COVID_ALL = 'GEODATA_FILL_COVID_ALL';
+export type GeodataFillCovidAllAction = {
+  type: typeof GEODATA_FILL_COVID_ALL;
+  payload: CovidAll;
+};
+
 export const GEODATA_SET_FETCHING_ERROR = 'GEODATA_SET_FETCHING_ERROR';
 export type GeodataSetFetchingErrorAction = {
   type: typeof GEODATA_SET_FETCHING_ERROR;
@@ -46,4 +52,5 @@ export type GeodataActionTypes =
   | GeodataStopFetchingAction
   | GeodataFillAction
   | GeodataSetFetchingErrorAction
-  | GeodataFillHistoricalAction;
+  | GeodataFillHistoricalAction
+  | GeodataFillCovidAllAction;

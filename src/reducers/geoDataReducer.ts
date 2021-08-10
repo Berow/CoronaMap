@@ -9,18 +9,20 @@ import {
   GEODATA_SET_COUNTRY,
   GEODATA_FILL_HISTORICAL,
 } from '../types/geodataActionTypes';
-import { countryData, HistoricalDataAll, HistoricalDataCountry } from '../utils';
+import { countryData, CovidAll, HistoricalDataAll, HistoricalDataCountry } from '../utils';
 
 export type GeodataState = {
   country: string;
   geoData: FeatureCollection | countryData;
   historicalData: HistoricalDataAll | HistoricalDataCountry | Record<string, never>;
+  covidAllData: CovidAll | null;
   isFetching: boolean;
   error: false | ErrorHttpAction;
 };
 
 const initialState: GeodataState = {
   country: '',
+  covidAllData: null,
   geoData: {
     type: 'FeatureCollection',
     features: [],
@@ -60,7 +62,7 @@ export const geodataReducer = (state = initialState, action: GeodataActionTypes)
         geoData: action.payload,
         error: false,
       };
-    case 'GEODATA_FILL_HISTORICAL':
+    case GEODATA_FILL_HISTORICAL:
       return {
         ...state,
         historicalData: action.payload,
