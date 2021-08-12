@@ -31,11 +31,12 @@ function fillChart({
   height = '20%',
   margin = { top: 10, right: 10, bottom: 20, left: 25 },
 }: AreaProps): JSX.Element {
+  const fillColor = `url(#${dataKey})`;
   return (
     <ResponsiveContainer width={width} height={height}>
       <AreaChart width={500} height={400} data={data} margin={margin}>
         <defs>
-          <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id={dataKey} x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor={color} stopOpacity={0.8} />
             <stop offset="95%" stopColor={color} stopOpacity={0} />
           </linearGradient>
@@ -43,7 +44,7 @@ function fillChart({
         <XAxis dataKey="date" />
         <YAxis />
         <Tooltip />
-        <Area type="monotone" dataKey={dataKey} stroke={color} fillOpacity={1} fill="url(#color)" />
+        <Area type="monotone" dataKey={dataKey} stroke={color} fillOpacity={1} fill={fillColor} />
       </AreaChart>
     </ResponsiveContainer>
   );
