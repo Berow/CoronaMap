@@ -27,7 +27,7 @@ function colorMap(data: Feature[]) {
 export const GeoJsonBordersLayer = (): null => {
   const map = useMap();
   const dispatch = useDispatch();
-  // let borders = new L.GeoJSON();
+
   let data: {
     map: Map<string, number>;
     scale: chroma.Scale<chroma.Color>;

@@ -27,14 +27,14 @@ function fillChart({
   data,
   dataKey,
   color,
-  width = '100%',
-  height = '20%',
+  width = '97%',
+  height = '18%',
   margin = { top: 10, right: 10, bottom: 20, left: 25 },
 }: AreaProps): JSX.Element {
   const fillColor = `url(#${dataKey})`;
   return (
     <ResponsiveContainer width={width} height={height}>
-      <AreaChart width={500} height={400} data={data} margin={margin}>
+      <AreaChart width={500} height={300} data={data} margin={margin}>
         <defs>
           <linearGradient id={dataKey} x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor={color} stopOpacity={0.8} />

@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
+import { useDispatch } from 'react-redux';
 import { FeatureCollection } from 'geojson';
 import { timeFormat } from 'd3-time-format';
 import { GeodataState } from '../../reducers/geoDataReducer';
+import { setCountry } from '../../actions/geodataActions';
 import { useGeodataFetch, useGetCountry, useFetchCountry, useCovidDataAllFetch } from '../../hooks';
 import { countryData, CovidAll, HistoricalDataAll, HistoricalDataCountry } from '../../utils/index';
 import { Chart } from '../../utils/Сharts';
+import './Sidebar.scss';
 
 const isCountry = (f: FeatureCollection | countryData | undefined): f is countryData => {
   return (f as countryData).country !== undefined;
@@ -36,12 +39,17 @@ type recoveredTimelineType = {
   date: string;
 }[];
 
-function renderCountry(
+function toWorldData(dispatch: Dispatch<any>) {
+  dispatch(setCountry(''));
+}
+
+const renderCountry = (
   geoData: countryData,
   casesTimeline: casesTimelineType,
   deathsTimeline: deathsTimelineType,
   recoveredTimeline: recoveredTimelineType,
-) {
+  dispatch: Dispatch<any>,
+) => {
   if (!geoData) return null;
 
   const { country, updated, cases, deaths, recovered } = geoData;
@@ -52,7 +60,7 @@ function renderCountry(
       <h2>{country}</h2>
       <ul>
         <li>
-          <strong>Confirmed:</strong> {cases}
+          <strong>Cases:</strong> {cases}
         </li>
         <li>
           <strong>Deaths:</strong> {deaths}
@@ -61,7 +69,7 @@ function renderCountry(
           <strong>Recovered:</strong> {recovered}
         </li>
         <li>
-          <strong>Last Update:</strong> {updatedFormatted}
+          <strong>Updated:</strong> {updatedFormatted}
         </li>
       </ul>
       <h3>Cases</h3>
@@ -70,16 +78,19 @@ function renderCountry(
       <Chart data={deathsTimeline} dataKey="deaths" color="red" />
       <h3>Recovered</h3>
       <Chart data={recoveredTimeline} dataKey="recovered" color="green" />
+      <button type="button" className="button-world" onClick={() => toWorldData(dispatch)}>
+        WORLD DATA
+      </button>
     </>
   );
-}
+};
 
-function renderWorld(
+const renderWorld = (
   covidAllData: CovidAll,
   casesTimeline: casesTimelineType,
   deathsTimeline: deathsTimelineType,
   recoveredTimeline: recoveredTimelineType,
-) {
+) => {
   if (!covidAllData) return null;
 
   console.log(covidAllData);
@@ -103,7 +114,7 @@ function renderWorld(
         <li>
           <strong>Last Update:</strong> {updatedFormatted}
         </li>
-      </ul>{' '}
+      </ul>
       <h3>Cases</h3>
       <Chart data={casesTimeline} dataKey="cases" color="orange" />
       <h3>Deaths</h3>
@@ -112,10 +123,11 @@ function renderWorld(
       <Chart data={recoveredTimeline} dataKey="recovered" color="green" />
     </>
   );
-}
+};
 
 export const Sidebar = (): JSX.Element => {
   const country = useGetCountry();
+  const dispatch = useDispatch();
 
   const casesTimeline = [];
   const deathsTimeline = [];
@@ -151,7 +163,13 @@ export const Sidebar = (): JSX.Element => {
           date: formatDate(new Date(dates[i])),
         });
       }
-      render = renderCountry(data.geoData, casesTimeline, deathsTimeline, recoveredTimeline);
+      render = renderCountry(
+        data.geoData,
+        casesTimeline,
+        deathsTimeline,
+        recoveredTimeline,
+        dispatch,
+      );
     }
   }
   if (!country) {
@@ -185,7 +203,7 @@ export const Sidebar = (): JSX.Element => {
   //   ? renderCountry(data.geoData, casesTimeline, deathsTimeline, recoveredTimeline)
   //   : 'All countries';
 
-  return <div>{render}</div>;
+  return <div className="sidebar">{render}</div>;
 };
 
 // TODO
